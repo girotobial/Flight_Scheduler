@@ -53,3 +53,7 @@ class Leg(Base):
     destination = sqa.Column(sqa.String, sqa.ForeignKey("Airport.airportCode"))
     departureTime = sqa.Column(sqa.Integer)
     arrivalTime = sqa.Column(sqa.Integer)
+    duration = sqa.Column(sqa.Integer)
+    registration = sqa.Column(sqa.String)
+    details = sqa.Column(sqa.String)
+    aircraft = sqa.Column(sqa.String, sqa.ForeignKey("Aircraft.aircraft"))
