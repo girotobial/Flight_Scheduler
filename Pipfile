@@ -16,6 +16,7 @@ pre-commit = "==2.9.3"
 isort = "==5.6.4"
 flake8-bandit = "==2.1.2"
 flake8-bugbear = "==20.11.1"
+sqlalchemy-stubs = "==0.3"
 
 
 [requires]
