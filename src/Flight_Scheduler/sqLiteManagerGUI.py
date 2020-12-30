@@ -4,8 +4,8 @@ Created on Wed Dec 10 18:29:26 2014
 
 @author: Anders Quigg
 """
-import sqlite3
 import random
+import sqlite3
 from datetime import datetime
 
 
@@ -20,7 +20,7 @@ class sqLiteDB:
         self.maxDuration = -1
         self.timeFromNow = -1
         self.desiredEras = [1, 1, 1, 1, 1, 1, 1]
-        ####DELETE TEMPORARY TABLES IF THEY EXIST###
+        # DELETE TEMPORARY TABLES IF THEY EXIST###
         cursor = self.dbOpen(self.filePath)
         cursor.execute("DROP TABLE IF EXISTS tempRouteTable")
         cursor.close()
@@ -194,7 +194,7 @@ class sqLiteDB:
 
         cursor = self.dbOpen(self.filePath)
         data = cursor.execute(baseQuery).fetchone()
-        if data == None:
+        if data is None:
             return []
         legID = data[1]
         mainQuery = (
@@ -237,7 +237,6 @@ class sqLiteDB:
             aircraftString = aircraftString[:-4]
             subQuery += aircraftString + ") AND "
         # origin,destination match
-        airportQuery = self.getAirportQuery()
         if len(self.desiredOrigin) > 0 and not self.desiredOrigin[0] == "":
             depString = "("
             for origin in self.desiredOrigin:
@@ -333,7 +332,7 @@ class sqLiteDB:
         for tuple in data:
             listTuple = list(tuple)
             availFlights.append(listTuple)
-        ###get all regs and pick one
+        # get all regs and pick one
         regSet = set()
         for row in availFlights:
             regSet.add(row[1])

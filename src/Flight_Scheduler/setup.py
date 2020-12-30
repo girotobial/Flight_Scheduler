@@ -1,7 +1,4 @@
-import sys
-import shutil
-
-from cx_Freeze import setup, Executable
+from cx_Freeze import Executable, setup
 
 # base = None
 # if sys.platform == "win32":
