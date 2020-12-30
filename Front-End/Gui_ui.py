@@ -4,7 +4,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtCore import Qt
 from sqLiteManagerGUI import sqLiteDB
 from copy import copy as copy
-import os,time
+import os, time
 
 
 def waiting_effects(function):
@@ -14,10 +14,10 @@ def waiting_effects(function):
         QApplication.restoreOverrideCursor()
         return new_function
 
-class Ui_FlightScheduler(QWidget):
 
+class Ui_FlightScheduler(QWidget):
     def setupUi(self, FlightScheduler):
-        self.checkMark = u'\u2713'
+        self.checkMark = u"\u2713"
         FlightScheduler.setObjectName("FlightScheduler")
         FlightScheduler.resize(1003, 800)
         self.horizontalLayout = QtWidgets.QHBoxLayout(FlightScheduler)
@@ -76,7 +76,9 @@ class Ui_FlightScheduler(QWidget):
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
         self.verticalLayout.addWidget(self.rollGroupBox)
         self.familyMenu = QtWidgets.QComboBox(FlightScheduler)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.familyMenu.sizePolicy().hasHeightForWidth())
@@ -109,7 +111,9 @@ class Ui_FlightScheduler(QWidget):
         self.currentTimeEntry = QtWidgets.QLineEdit(FlightScheduler)
         self.currentTimeEntry.setEnabled(False)
         self.currentLabel2 = QtWidgets.QLabel(" minutes")
-        self.currentTimeSpacer = QtWidgets.QSpacerItem(20,40,QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Minimum)
+        self.currentTimeSpacer = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.currentHorizontalLayout.addWidget(self.currentCheckBox)
         self.currentHorizontalLayout.addWidget(self.currentLabel)
         self.currentHorizontalLayout.addWidget(self.currentTimeEntry)
@@ -143,8 +147,9 @@ class Ui_FlightScheduler(QWidget):
         self.eraHorizontalLayout.addWidget(self.eraModernCheckBox)
         self.verticalLayout.addWidget(self.eraGroupBox)
 
-
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout.addItem(spacerItem)
         self.resultLabel = QtWidgets.QLabel("Results:")
         self.verticalLayout.addWidget(self.resultLabel)
@@ -163,14 +168,16 @@ class Ui_FlightScheduler(QWidget):
         self.outputHorizontalLayout.addWidget(self.outputLegList)
         self.outputHorizontalLayout.addWidget(self.outputText)
         self.aircraft.addLayout(self.outputHorizontalLayout)
-        #self.aircraft.addWidget(self.outputText)
+        # self.aircraft.addWidget(self.outputText)
 
         self.leftPanel.addLayout(self.aircraft)
         self.horizontalLayout.addLayout(self.leftPanel)
         self.rightPanel = QtWidgets.QVBoxLayout()
         self.rightPanel.setObjectName("rightPanel")
         self.displayTable = QtWidgets.QTableWidget(FlightScheduler)
-        self.displayTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.displayTable.setSelectionMode(
+            QtWidgets.QAbstractItemView.ExtendedSelection
+        )
         self.displayTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.displayTable.setObjectName("displayTable")
         self.displayTable.setColumnCount(5)
@@ -194,10 +201,10 @@ class Ui_FlightScheduler(QWidget):
         self.fullRandom_btn = QtWidgets.QPushButton(FlightScheduler)
         self.fullRandom_btn.setObjectName("fullRandom_btn")
         self.horizontalLayout_3.addWidget(self.fullRandom_btn)
-        #self.rndRoute_btn = QtWidgets.QPushButton(FlightScheduler)
-        #self.rndRoute_btn.setObjectName("rndRoute_btn")
+        # self.rndRoute_btn = QtWidgets.QPushButton(FlightScheduler)
+        # self.rndRoute_btn.setObjectName("rndRoute_btn")
         self.updateTable_btn = QtWidgets.QPushButton(FlightScheduler)
-        #self.horizontalLayout_3.addWidget(self.rndRoute_btn)
+        # self.horizontalLayout_3.addWidget(self.rndRoute_btn)
         self.horizontalLayout_3.addWidget(self.updateTable_btn)
         self.rightPanel.addLayout(self.horizontalLayout_3)
         self.horizontalLayout.addLayout(self.rightPanel)
@@ -207,24 +214,41 @@ class Ui_FlightScheduler(QWidget):
 
     def retranslateUi(self, FlightScheduler):
         _translate = QtCore.QCoreApplication.translate
-        FlightScheduler.setWindowTitle(_translate("FlightScheduler", "Flight Scheduler v1.7"))
-        self.airportCheck.setText(_translate("FlightScheduler", "Specify airport details?"))
-        self.departureLabel.setText(_translate("FlightScheduler", "Specify departure (ICAO):"))
-        self.arrivalLabel.setText(_translate("FlightScheduler", "Specify arrival (ICAO):"))
+        FlightScheduler.setWindowTitle(
+            _translate("FlightScheduler", "Flight Scheduler v1.7")
+        )
+        self.airportCheck.setText(
+            _translate("FlightScheduler", "Specify airport details?")
+        )
+        self.departureLabel.setText(
+            _translate("FlightScheduler", "Specify departure (ICAO):")
+        )
+        self.arrivalLabel.setText(
+            _translate("FlightScheduler", "Specify arrival (ICAO):")
+        )
         self.airlineCheck.setText(_translate("FlightScheduler", "Specify airlines?"))
         self.rollGroupBox.setTitle(_translate("FlightScheduler", "Role"))
         self.paxCheckBox.setText(_translate("FlightScheduler", "PAX"))
         self.cargoCheckBox.setText(_translate("FlightScheduler", "Cargo"))
         #######initialize acFamilyStuff,now in seperate method
         self.familyMenu.setItemText(0, _translate("FlightScheduler", "Aircraft Family"))
-        self.familyMenu.model().setData(self.familyMenu.model().index(0,0),QtCore.QVariant(0),QtCore.Qt.UserRole-1)
+        self.familyMenu.model().setData(
+            self.familyMenu.model().index(0, 0),
+            QtCore.QVariant(0),
+            QtCore.Qt.UserRole - 1,
+        )
         #####done
         self.resetAircraft_btn.setText(_translate("FlightScheduler", "Reset Aircraft"))
-        self.outputText.setHtml(_translate("FlightScheduler", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.outputText.setHtml(
+            _translate(
+                "FlightScheduler",
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                '<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p></body></html>',
+            )
+        )
         item = self.displayTable.horizontalHeaderItem(0)
         item.setText(_translate("FlightScheduler", "Airline"))
         item = self.displayTable.horizontalHeaderItem(1)
@@ -233,27 +257,27 @@ class Ui_FlightScheduler(QWidget):
         item.setText(_translate("FlightScheduler", "To"))
         item = self.displayTable.horizontalHeaderItem(3)
         item.setText(_translate("FlightScheduler", "Aircraft"))
-        #item = self.displayTable.horizontalHeaderItem(4)
-        #item.setText(_translate("FlightScheduler", "Via"))
+        # item = self.displayTable.horizontalHeaderItem(4)
+        # item.setText(_translate("FlightScheduler", "Via"))
         self.fullRandom_btn.setText(_translate("FlightScheduler", "Random Flight"))
-        #self.rndRoute_btn.setText(_translate("FlightScheduler", "Random Route"))
+        # self.rndRoute_btn.setText(_translate("FlightScheduler", "Random Route"))
         self.updateTable_btn.setText(_translate("FlightScheduler", "Refresh Table"))
 
     def __init__(self):
         QWidget.__init__(self)
         self.setupUi(self)
         self.reset = False
-        #read in aircraftFamilies mapped to subtypes
-        self.fileName = os.getcwd()+"\\FlightDB.db"
+        # read in aircraftFamilies mapped to subtypes
+        self.fileName = os.getcwd() + "\\FlightDB.db"
         self.db = sqLiteDB(self.fileName)
         self.acSchema = self.db.pullAircraft()
         ####initialize master vectors#####
         self.master_familyVector = {}
         self.master_subtypeVector = {}
         for family in self.acSchema[0].keys():
-            self.master_familyVector[family]=False
+            self.master_familyVector[family] = False
             for subtype in self.acSchema[0][family]:
-                self.master_subtypeVector[subtype]=False
+                self.master_subtypeVector[subtype] = False
         #########################
         self.initAircraftMenu()
         self.subTypeList.itemClicked.connect(self.subTypeClicked)
@@ -272,7 +296,7 @@ class Ui_FlightScheduler(QWidget):
         self.longDuration_btn.toggled.connect(self.setLongDuration)
         self.ultraLongDuration_btn.toggled.connect(self.setUltraDuration)
         self.fullRandom_btn.pressed.connect(self.generateFlight)
-        #self.rndRoute_btn.pressed.connect(self.generateRoute)
+        # self.rndRoute_btn.pressed.connect(self.generateRoute)
         self.updateTable_btn.pressed.connect(self.updateTable)
         self.displayTable.setRowCount(0)
         self.displayTable.itemClicked.connect(self.generateFlightFromTable)
@@ -295,7 +319,7 @@ class Ui_FlightScheduler(QWidget):
             self.currentTimeEntry.setEnabled(True)
 
     def erasCheckChanged(self):
-        eraList = [1,1,1,1,1,1,1]
+        eraList = [1, 1, 1, 1, 1, 1, 1]
         if not self.era1950CheckBox.isChecked():
             eraList[0] = 0
         if not self.era1960CheckBox.isChecked():
@@ -312,7 +336,7 @@ class Ui_FlightScheduler(QWidget):
             eraList[6] = 0
         self.db.desiredEras = eraList
 
-#    @waiting_effects
+    #    @waiting_effects
     def updateTable(self):
         if self.currentCheckBox.isChecked():
             timeFromNow = self.sanitizeInput(self.currentTimeEntry.text())[0]
@@ -330,31 +354,31 @@ class Ui_FlightScheduler(QWidget):
         tableData = self.db.getTableDetails()
         if len(tableData) > 0 and not tableData == "NONE":
             self.displayTable.setRowCount(len(tableData))
-            for i in range(0,len(tableData)):
+            for i in range(0, len(tableData)):
                 item0 = QTableWidgetItem(tableData[i][0])
                 item0.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.displayTable.setItem(i,0,item0)
+                self.displayTable.setItem(i, 0, item0)
                 item1 = QTableWidgetItem(tableData[i][1])
                 item1.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.displayTable.setItem(i,1,item1)
+                self.displayTable.setItem(i, 1, item1)
                 item2 = QTableWidgetItem(tableData[i][2])
                 item2.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.displayTable.setItem(i,2,item2)
+                self.displayTable.setItem(i, 2, item2)
                 item3 = QTableWidgetItem(tableData[i][3])
                 item3.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.displayTable.setItem(i,3,item3)
+                self.displayTable.setItem(i, 3, item3)
         else:
             self.displayTable.setRowCount(0)
 
-#    @waiting_effects
+    #    @waiting_effects
     def generateFlightFromTable(self):
         self.outputText.setText("Thinking....")
         row = self.displayTable.row(self.displayTable.currentItem())
-        airline = self.displayTable.item(row,0).text()
-        origin = self.displayTable.item(row,1).text()
-        dest = self.displayTable.item(row,2).text()
-        aircraft = self.displayTable.item(row,3).text()
-        result = self.db.getSpecificFlight(airline,origin,dest,aircraft)
+        airline = self.displayTable.item(row, 0).text()
+        origin = self.displayTable.item(row, 1).text()
+        dest = self.displayTable.item(row, 2).text()
+        aircraft = self.displayTable.item(row, 3).text()
+        result = self.db.getSpecificFlight(airline, origin, dest, aircraft)
         self.displayOutput(result)
 
     def generateFlight(self):
@@ -404,53 +428,90 @@ class Ui_FlightScheduler(QWidget):
             self.outputText.setText("No valid flights!!")
         else:
             self.currentLegs = legData[0]
-            for i in range(0,len(legData[0])):
-                item = QListWidgetItem("Leg "+str(i+1))
+            for i in range(0, len(legData[0])):
+                item = QListWidgetItem("Leg " + str(i + 1))
                 self.outputLegList.addItem(item)
                 if legData[0][i][6] == legData[1]:
                     wantedIndex = i
             self.outputLegList.setCurrentRow(wantedIndex)
             self.outputText.setText(self.printLeg(legData[0][wantedIndex]))
 
-    def printLeg(self,chosenLeg):
+    def printLeg(self, chosenLeg):
         try:
-            baseString = self.db.getAirlineFull(chosenLeg[1])+" "+chosenLeg[1]+str(chosenLeg[2])+", "+self.getSeason(chosenLeg[3])+" "+str(chosenLeg[4])+"\n"
-            baseString += str(self.db.getAircraftDetails(chosenLeg[-1])[1])+" "+chosenLeg[-3]+"\n"
+            baseString = (
+                self.db.getAirlineFull(chosenLeg[1])
+                + " "
+                + chosenLeg[1]
+                + str(chosenLeg[2])
+                + ", "
+                + self.getSeason(chosenLeg[3])
+                + " "
+                + str(chosenLeg[4])
+                + "\n"
+            )
+            baseString += (
+                str(self.db.getAircraftDetails(chosenLeg[-1])[1])
+                + " "
+                + chosenLeg[-3]
+                + "\n"
+            )
         except Exception:
             a = 4
-#        if chosenLeg[5] != "NULL":
-#            baseString += chosenLeg[5]+"\n"
+        #        if chosenLeg[5] != "NULL":
+        #            baseString += chosenLeg[5]+"\n"
         if chosenLeg[-2] != "NULL":
-            baseString += chosenLeg[-2]+"\n"
-        baseString += "Planned block time: "+self.formatTime(chosenLeg[-4])+"\n"
+            baseString += chosenLeg[-2] + "\n"
+        baseString += "Planned block time: " + self.formatTime(chosenLeg[-4]) + "\n"
         baseString += "\nDepart:\n"
         depDetails = self.db.getAirportDetails(chosenLeg[7])
         arrDetails = self.db.getAirportDetails(chosenLeg[8])
-        baseString += depDetails[-1]+" ("+chosenLeg[7]+")\n"
+        baseString += depDetails[-1] + " (" + chosenLeg[7] + ")\n"
         locString = depDetails[3]
-        if(depDetails[4] != "NULL"):
-            locString+=", "+depDetails[4]
-        baseString+= locString+", "+depDetails[-2]+"\n"
+        if depDetails[4] != "NULL":
+            locString += ", " + depDetails[4]
+        baseString += locString + ", " + depDetails[-2] + "\n"
         utc = self.timeToString(chosenLeg[9])
         if chosenLeg[3] == 1:
-            depLocalTime = self.timeToString(chosenLeg[9]+self.getTimeOffset(chosenLeg[9],depDetails[1]))
+            depLocalTime = self.timeToString(
+                chosenLeg[9] + self.getTimeOffset(chosenLeg[9], depDetails[1])
+            )
         else:
-            depLocalTime = self.timeToString(chosenLeg[9]+self.getTimeOffset(chosenLeg[9],depDetails[2]))
-        baseString += self.getDayString(depLocalTime[0])+" "+depLocalTime[1]+" ("+utc[1]+" UTC)\n"
-        baseString += "\nArrive:\n"+arrDetails[-1]+" ("+chosenLeg[8]+")\n"
+            depLocalTime = self.timeToString(
+                chosenLeg[9] + self.getTimeOffset(chosenLeg[9], depDetails[2])
+            )
+        baseString += (
+            self.getDayString(depLocalTime[0])
+            + " "
+            + depLocalTime[1]
+            + " ("
+            + utc[1]
+            + " UTC)\n"
+        )
+        baseString += "\nArrive:\n" + arrDetails[-1] + " (" + chosenLeg[8] + ")\n"
         locString = arrDetails[3]
-        if(arrDetails[4] != "NULL"):
-            locString+=", "+arrDetails[4]
-        baseString += locString+", "+arrDetails[-2]+"\n"
+        if arrDetails[4] != "NULL":
+            locString += ", " + arrDetails[4]
+        baseString += locString + ", " + arrDetails[-2] + "\n"
         utc = self.timeToString(chosenLeg[10])
         if chosenLeg[3] == 1:
-            arrLocalTime = self.timeToString(chosenLeg[10]+self.getTimeOffset(chosenLeg[10],arrDetails[1]))
+            arrLocalTime = self.timeToString(
+                chosenLeg[10] + self.getTimeOffset(chosenLeg[10], arrDetails[1])
+            )
         else:
-            arrLocalTime = self.timeToString(chosenLeg[10]+self.getTimeOffset(chosenLeg[10],arrDetails[2]))
-        baseString += self.getDayString(arrLocalTime[0])+" "+arrLocalTime[1]+" ("+utc[1]+" UTC)\n"
+            arrLocalTime = self.timeToString(
+                chosenLeg[10] + self.getTimeOffset(chosenLeg[10], arrDetails[2])
+            )
+        baseString += (
+            self.getDayString(arrLocalTime[0])
+            + " "
+            + arrLocalTime[1]
+            + " ("
+            + utc[1]
+            + " UTC)\n"
+        )
         return baseString
 
-    def getDayString(self,dayInt):
+    def getDayString(self, dayInt):
         if dayInt == 1:
             return "Monday"
         if dayInt == 2:
@@ -466,33 +527,33 @@ class Ui_FlightScheduler(QWidget):
         if dayInt == 7:
             return "Sunday"
 
-    def timeToString(self,rawTime):
+    def timeToString(self, rawTime):
         if rawTime > 10080:
             rawTime -= 10080
         if rawTime < 1:
             rawTime += 10080
-        day = (rawTime // (24*60))
-        hour = (rawTime - (day*24*60)) // 60
-        minute = rawTime - (day*24*60) - (hour*60)
+        day = rawTime // (24 * 60)
+        hour = (rawTime - (day * 24 * 60)) // 60
+        minute = rawTime - (day * 24 * 60) - (hour * 60)
         hourString = str(hour)
         minuteString = str(minute)
         if len(hourString) == 1:
-            hourString = '0'+hourString
+            hourString = "0" + hourString
         if len(minuteString) == 1:
-            minuteString = '0'+minuteString
-        return [day+1,hourString+":"+minuteString]
+            minuteString = "0" + minuteString
+        return [day + 1, hourString + ":" + minuteString]
 
-    def getTimeOffset(self,rawTime,timezone):
+    def getTimeOffset(self, rawTime, timezone):
         timeOffset = timezone.split(":")
         sign = timeOffset[0][0]
         hour = int(timeOffset[0][1:])
         minute = int(timeOffset[1])
-        if sign == '+':
-            return minute + (hour*60)
+        if sign == "+":
+            return minute + (hour * 60)
         else:
-            return -(minute+(hour*60))
+            return -(minute + (hour * 60))
 
-    def getSeason(self,season):
+    def getSeason(self, season):
         if season == 1:
             return "Summer"
         return "Winter"
@@ -504,9 +565,9 @@ class Ui_FlightScheduler(QWidget):
                 resultArray.append(subType)
         self.db.desiredAircraft = resultArray
 
-    def sanitizeInput(self,input):
-        array = input.upper().split(',')
-        array = [x.strip(' ') for x in array]
+    def sanitizeInput(self, input):
+        array = input.upper().split(",")
+        array = [x.strip(" ") for x in array]
         return array
 
     def airportCheckChange(self):
@@ -532,46 +593,56 @@ class Ui_FlightScheduler(QWidget):
     def resetButtonPressed(self):
         #####Clear table
         self.initAircraftMenu()
-        self.reset=True
+        self.reset = True
         self.paxCheckBox.setChecked(True)
         self.cargoCheckBox.setChecked(True)
-        self.reset=False
+        self.reset = False
 
-    def formatTime(self,rawminutes):
-        hours = rawminutes//60
-        minutes = int(rawminutes - (hours*60))
+    def formatTime(self, rawminutes):
+        hours = rawminutes // 60
+        minutes = int(rawminutes - (hours * 60))
         minuteString = str(minutes)
         if len(minuteString) == 1:
-            minuteString = '0'+minuteString
+            minuteString = "0" + minuteString
         hourString = str(hours)
         if len(hourString) == 1:
-            hourString = '0'+hourString
-        return str(hourString)+":"+str(minuteString)
+            hourString = "0" + hourString
+        return str(hourString) + ":" + str(minuteString)
 
-    def paxCheckChange(self,state):
-        for index in range(self.subTypeList.count()-1,-1,-1):
+    def paxCheckChange(self, state):
+        for index in range(self.subTypeList.count() - 1, -1, -1):
             for typeCode in self.acSchema[1].keys():
-                if self.acSchema[1][typeCode] == self.subTypeList.item(index).text() and not self.acSchema[2][typeCode] == 4:
+                if (
+                    self.acSchema[1][typeCode] == self.subTypeList.item(index).text()
+                    and not self.acSchema[2][typeCode] == 4
+                ):
                     subType = typeCode
                     if self.paxCheckBox.isChecked():
-                        self.subTypeList.item(index).setForeground(QtGui.QColor('green'))
+                        self.subTypeList.item(index).setForeground(
+                            QtGui.QColor("green")
+                        )
                         self.current_subTypeVector[subType] = True
                     else:
-                        self.subTypeList.item(index).setForeground(QtGui.QColor('red'))
+                        self.subTypeList.item(index).setForeground(QtGui.QColor("red"))
                         self.current_subTypeVector[subType] = False
         if not self.reset:
             self.sendAircraft()
 
-    def cargoCheckChange(self,state):
-        for index in range(self.subTypeList.count()-1,-1,-1):
+    def cargoCheckChange(self, state):
+        for index in range(self.subTypeList.count() - 1, -1, -1):
             for typeCode in self.acSchema[1].keys():
-                if self.acSchema[1][typeCode] == self.subTypeList.item(index).text() and self.acSchema[2][typeCode] == 4:
+                if (
+                    self.acSchema[1][typeCode] == self.subTypeList.item(index).text()
+                    and self.acSchema[2][typeCode] == 4
+                ):
                     subType = typeCode
                     if self.cargoCheckBox.isChecked():
-                        self.subTypeList.item(index).setForeground(QtGui.QColor('green'))
+                        self.subTypeList.item(index).setForeground(
+                            QtGui.QColor("green")
+                        )
                         self.current_subTypeVector[subType] = True
                     else:
-                        self.subTypeList.item(index).setForeground(QtGui.QColor('red'))
+                        self.subTypeList.item(index).setForeground(QtGui.QColor("red"))
                         self.current_subTypeVector[subType] = False
         if not self.reset:
             self.sendAircraft()
@@ -582,34 +653,38 @@ class Ui_FlightScheduler(QWidget):
         self.familyMenu.clear()
         self.subTypeList.clear()
         self.familyMenu.addItem("Aircraft Family")
-        self.familyMenu.model().setData(self.familyMenu.model().index(0,0),QtCore.QVariant(0),QtCore.Qt.UserRole-1)
+        self.familyMenu.model().setData(
+            self.familyMenu.model().index(0, 0),
+            QtCore.QVariant(0),
+            QtCore.Qt.UserRole - 1,
+        )
 
-        for aircraftFamily in sorted(self.master_familyVector.keys(),key=str.lower):
+        for aircraftFamily in sorted(self.master_familyVector.keys(), key=str.lower):
             self.familyMenu.addItem(aircraftFamily)
         self.sendAircraft()
         ###########REAPPLY FILTER
 
-    def familyChanged(self,currentText):
+    def familyChanged(self, currentText):
         if not currentText == "Aircraft Family" and not currentText == "":
             self.familyMenu.setCurrentText("Aircraft Family")
             index = self.familyMenu.findText(currentText)
             if currentText.endswith(self.checkMark):
                 newText = currentText[0:-2]
-                self.familyMenu.setItemText(index,newText)
+                self.familyMenu.setItemText(index, newText)
                 subTypes = self.acSchema[0][newText]
                 fullNames = []
                 for subType in subTypes:
                     fullNames.append(self.acSchema[1][subType])
                     self.current_subTypeVector[subType] = False
-                for index in range(self.subTypeList.count()-1,-1,-1):
+                for index in range(self.subTypeList.count() - 1, -1, -1):
                     if self.subTypeList.item(index).text() in fullNames:
                         self.subTypeList.takeItem(index)
             else:
-                self.familyMenu.setItemText(index,currentText+"\t"+self.checkMark)
+                self.familyMenu.setItemText(index, currentText + "\t" + self.checkMark)
                 subTypes = self.acSchema[0][currentText]
                 for subType in subTypes:
                     item = QListWidgetItem(self.acSchema[1][subType])
-                    item.setForeground(QtGui.QColor('green'))
+                    item.setForeground(QtGui.QColor("green"))
                     self.subTypeList.addItem(item)
                     self.current_subTypeVector[subType] = True
             ############SORT SUBTYPE LIST!!!!!!!!!!!#################
@@ -640,24 +715,26 @@ class Ui_FlightScheduler(QWidget):
             self.db.minDuration = 599
             self.db.maxDuration = 1000000
 
-    def subTypeClicked(self,item):
-        for key,val in self.acSchema[1].items():
+    def subTypeClicked(self, item):
+        for key, val in self.acSchema[1].items():
             if val == item.text():
                 subType = key
-        if item.foreground() == QtGui.QColor('green'):
+        if item.foreground() == QtGui.QColor("green"):
             ####item disabled
-            item.setForeground(QtGui.QColor('red'))
+            item.setForeground(QtGui.QColor("red"))
             self.current_subTypeVector[subType] = False
         else:
             ####item enabled
-            item.setForeground(QtGui.QColor('green'))
+            item.setForeground(QtGui.QColor("green"))
             self.current_subTypeVector[subType] = True
         ###########REAPPLY FILTER
         self.sendAircraft()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
-    from PyQt5.QtWidgets import QApplication,QListWidgetItem,QTableWidgetItem
+    from PyQt5.QtWidgets import QApplication, QListWidgetItem, QTableWidgetItem
+
     app = QApplication(sys.argv)
     ex = Ui_FlightScheduler()
     ex.show()
