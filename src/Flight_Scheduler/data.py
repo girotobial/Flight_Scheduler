@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import field
 from pathlib import Path
-from typing import List, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import sqlalchemy as sqa
 from pydantic.dataclasses import dataclass
@@ -32,6 +32,9 @@ class Family:
         "properties": {"types": relationship("Type", back_populates="family")}
     }
 
+    def to_dict(self):
+        return {"name": self.name, "types": [type_.to_dict() for type_ in self.types]}
+
 
 @mapper_registry.mapped
 @dataclass
@@ -57,6 +60,17 @@ class Type:
     __mapper_args__ = {
         "properties": {"family": relationship("Family", back_populates="types")}
     }
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "icao_code": self.icao_code,
+            "name": self.name,
+            "propulsion": self.propulsion,
+            "family": self.family.name,
+        }
+
+    def to_tuple(self) -> Tuple[str, str, int, str]:
+        return (self.icao_code, self.name, self.propulsion, self.family.name)
 
 
 @mapper_registry.mapped
@@ -222,9 +236,49 @@ class Database:
         Session = sessionmaker(self.engine)
         self.session = Session()
         self.session.begin()
-        print("entering db")
         return self
 
     def __exit__(self, *args) -> None:
         self.session.close()
-        print("leaving db")
+
+    def start(self) -> None:
+        self.__enter__()
+
+    def stop(self) -> None:
+        self.__exit__()
+
+    def types(
+        self, data_type: Optional[str] = "tuple"
+    ) -> Union[List[tuple], List[dict], None]:
+        """Aircraft types in the database
+
+        Parameters
+        ----------
+        data_type : str, optional
+            output type of the , by default "tuple"
+
+        Returns
+        -------
+        List[chosen data type]
+            contents of the types table
+
+        Raises
+        ------
+        ValueError
+            if data_type is not valid
+        """
+        results = self.session.query(Type).all()
+
+        DATA_TYPES = ["tuple", "dict"]
+        if data_type not in DATA_TYPES:
+            raise ValueError(
+                f"Unknown data_type '{data_type}', should be one of {DATA_TYPES}"
+            )
+
+        if data_type == "tuple":
+            return [type_.to_tuple() for type_ in results]
+
+        if data_type == "dict":
+            return [type_.to_dict() for type_ in results]
+
+        return None
