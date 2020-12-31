@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import os
 from dataclasses import field
-from typing import List
+from pathlib import Path
+from typing import List, Union
 
 import sqlalchemy as sqa
 from pydantic.dataclasses import dataclass
-from sqlalchemy.orm import registry, relationship  # type: ignore
+from sqlalchemy.orm import registry, relationship, sessionmaker  # type: ignore
 
 mapper_registry = registry()
 
@@ -73,7 +75,7 @@ class Aircraft:
     type_id: int = field(repr=False)
 
     type_: Type
-    legs: List[Leg] = field(default_factory=list)
+    legs: List[Leg] = field(default_factory=list, repr=False)
 
     __mapper_args__ = {
         "properties": {
@@ -98,7 +100,7 @@ class Airline:
     icao_code: str
     name: str
 
-    flights: List[Flight] = field(default_factory=list)
+    flights: List[Flight] = field(default_factory=list, repr=False)
 
     __mapper_args__ = {
         "properties": {
@@ -205,3 +207,24 @@ class Leg:
             "aircraft": relationship("Aircraft", back_populates="legs"),
         }
     }
+
+
+class Database:
+    def __init__(self, file_path: Union[str, os.PathLike]):
+        self.file_path = self._enforce_path(file_path)
+        self.engine = sqa.create_engine(f"sqlite://{file_path}")
+
+    @staticmethod
+    def _enforce_path(file_path: Union[str, os.PathLike]) -> os.PathLike:
+        return Path(file_path)
+
+    def __enter__(self) -> Database:
+        Session = sessionmaker(self.engine)
+        self.session = Session()
+        self.session.begin()
+        print("entering db")
+        return self
+
+    def __exit__(self, *args) -> None:
+        self.session.close()
+        print("leaving db")
