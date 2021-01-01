@@ -79,11 +79,14 @@ class AirportBox(QtWidgets.QWidget, MethodsMixin):
 
         self.checkbox = QtWidgets.QCheckBox(self)
         self.checkbox.setText(self._translate("Specify airport details?"))
+        self.checkbox.stateChanged.connect(self._checkbox_change_state)
 
         departure_label = self._create_label("Specify departure (ICAO):")
         destination_label = self._create_label("Specify destination (ICAO):")
         self.departure_textbox = QtWidgets.QLineEdit(self)
+        self.departure_textbox.setEnabled(False)
         self.destination_textbox = QtWidgets.QLineEdit(self)
+        self.destination_textbox.setEnabled(False)
 
         layout = self._create_layout(
             layout=QtWidgets.QVBoxLayout(),
@@ -95,8 +98,15 @@ class AirportBox(QtWidgets.QWidget, MethodsMixin):
                 self.destination_textbox,
             ],
         )
-
         self.setLayout(layout)
+
+    def _checkbox_change_state(self) -> None:
+        state = self.checkbox.isChecked()
+        self.departure_textbox.setEnabled(state)
+        self.destination_textbox.setEnabled(state)
+
+    def _reset(self) -> None:
+        self.checkbox.setChecked(False)
 
 
 class Ui_FlightScheduler(QWidget):
