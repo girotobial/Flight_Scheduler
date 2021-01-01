@@ -1,7 +1,7 @@
 import os
 from copy import copy as copy
 
-from constants import VERSION
+from constant import ICON_PATH, VERSION
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
@@ -18,7 +18,7 @@ def waiting_effects(function):
 
 
 class TranslateMixin:
-    def translate(self, text: str) -> str:
+    def _translate(self, text: str) -> str:
         """Wrapper around QtCore.QCoreApplication.translate
 
         Parameters
@@ -40,8 +40,12 @@ class MainWindow(QMainWindow, TranslateMixin):
         self._init_gui()
 
     def _init_gui(self) -> None:
-        self.setWindowTitle(self.translate(f"Flight Scheduler v{VERSION}"))
+        self.setWindowTitle(self._translate(f"Flight Scheduler v{VERSION}"))
         self.resize(1000, 800)
+        self.setWindowIcon(QtGui.QIcon(ICON_PATH))
+
+    def _create_layout(self):
+        pass
 
 
 class Ui_FlightScheduler(QWidget):
