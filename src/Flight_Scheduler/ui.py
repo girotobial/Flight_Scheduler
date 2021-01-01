@@ -1,10 +1,11 @@
 import os
 from copy import copy as copy
 
+from constants import VERSION
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QAbstractItemView, QWidget
+from PyQt5.QtWidgets import QAbstractItemView, QMainWindow, QWidget
 from sqLiteManagerGUI import sqLiteDB
 
 
@@ -16,9 +17,36 @@ def waiting_effects(function):
         return new_function
 
 
+class TranslateMixin:
+    def translate(self, text: str) -> str:
+        """Wrapper around QtCore.QCoreApplication.translate
+
+        Parameters
+        ----------
+        text : str
+            text to be translated
+
+        Returns
+        -------
+        str
+            translated text
+        """
+        return QtCore.QCoreApplication.translate(type(self).__name__, text)
+
+
+class MainWindow(QMainWindow, TranslateMixin):
+    def __init__(self):
+        super(QMainWindow, self).__init__()
+        self._init_gui()
+
+    def _init_gui(self) -> None:
+        self.setWindowTitle(self.translate(f"Flight Scheduler v{VERSION}"))
+        self.resize(1000, 800)
+
+
 class Ui_FlightScheduler(QWidget):
     def setupUi(self, FlightScheduler):
-        self.checkMark = u"\u2713"
+        self.checkMark = "\u2713"
         FlightScheduler.setObjectName("FlightScheduler")
         FlightScheduler.resize(1003, 800)
         self.horizontalLayout = QtWidgets.QHBoxLayout(FlightScheduler)
