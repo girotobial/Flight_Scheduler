@@ -40,6 +40,7 @@ class MainWindow(QMainWindow, TranslateMixin):
         self._init_gui()
 
     def _init_gui(self) -> None:
+        """Starts the gui"""
         self.setWindowTitle(self._translate(f"Flight Scheduler v{VERSION}"))
         self.resize(1000, 800)
         self.setWindowIcon(QtGui.QIcon(ICON_PATH))
