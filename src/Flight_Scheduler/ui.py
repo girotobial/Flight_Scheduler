@@ -1,5 +1,6 @@
 import os
 from copy import copy as copy
+from typing import List
 
 from constant import ICON_PATH, VERSION
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -17,7 +18,7 @@ def waiting_effects(function):
         return new_function
 
 
-class TranslateMixin:
+class MethodsMixin:
     def _translate(self, text: str) -> str:
         """Wrapper around QtCore.QCoreApplication.translate
 
@@ -33,8 +34,21 @@ class TranslateMixin:
         """
         return QtCore.QCoreApplication.translate(type(self).__name__, text)
 
+    def _create_label(self, text: str) -> QtWidgets.QLabel:
+        label = QtWidgets.QLabel(self)
+        label.setText(self._translate(text))
+        return label
 
-class MainWindow(QMainWindow, TranslateMixin):
+    @staticmethod
+    def _create_layout(
+        layout: QtWidgets.QLayout, widgets: List[QtWidgets.QWidget]
+    ) -> QtWidgets.QLayout:
+        for widget in widgets:
+            layout.addWidget(widget)
+        return layout
+
+
+class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self._init_gui()
@@ -45,8 +59,44 @@ class MainWindow(QMainWindow, TranslateMixin):
         self.resize(1000, 800)
         self.setWindowIcon(QtGui.QIcon(ICON_PATH))
 
-    def _create_layout(self):
-        pass
+        self.airports = AirportBox()
+        layout = self._create_layout(
+            layout=QtWidgets.QGridLayout(), widgets=[self.airports]
+        )
+
+        central_widget = QtWidgets.QWidget()
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
+
+
+class AirportBox(QtWidgets.QWidget, MethodsMixin):
+    def __init__(self):
+        super(QWidget, self).__init__()
+        self._init_gui()
+
+    def _init_gui(self) -> None:
+        """Starts the gui"""
+
+        self.checkbox = QtWidgets.QCheckBox(self)
+        self.checkbox.setText(self._translate("Specify airport details?"))
+
+        departure_label = self._create_label("Specify departure (ICAO):")
+        destination_label = self._create_label("Specify destination (ICAO):")
+        self.departure_textbox = QtWidgets.QLineEdit(self)
+        self.destination_textbox = QtWidgets.QLineEdit(self)
+
+        layout = self._create_layout(
+            layout=QtWidgets.QVBoxLayout(),
+            widgets=[
+                self.checkbox,
+                departure_label,
+                self.departure_textbox,
+                destination_label,
+                self.destination_textbox,
+            ],
+        )
+
+        self.setLayout(layout)
 
 
 class Ui_FlightScheduler(QWidget):
