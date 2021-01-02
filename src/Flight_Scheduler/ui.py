@@ -2,7 +2,7 @@ import os
 from copy import copy as copy
 from typing import Dict, List
 
-from constant import ICON_PATH, VERSION
+import constant
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
@@ -81,16 +81,25 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
 
     def _init_gui(self) -> None:
         """Starts the gui"""
-        self.setWindowTitle(self._translate(f"Flight Scheduler v{VERSION}"))
-        self.resize(1000, 800)
-        self.setWindowIcon(QtGui.QIcon(ICON_PATH))
+        self.setWindowTitle(self._translate(f"Flight Scheduler v{constant.VERSION}"))
+        self.resize(1300, 800)
+        self.setWindowIcon(QtGui.QIcon(constant.ICON_PATH))
 
         self.airports = AirportBox()
         self.role_groupbox = RollGroupBox()
+        self.flight_table = FlightTable()
 
-        layout = self._create_layout(
-            layout=QtWidgets.QGridLayout(), widgets=[self.airports, self.role_groupbox]
+        left_panel = self._create_layout(
+            layout=QtWidgets.QVBoxLayout(), widgets=[self.airports, self.role_groupbox]
         )
+
+        right_panel = self._create_layout(
+            layout=QtWidgets.QVBoxLayout(), widgets=[self.flight_table]
+        )
+
+        layout = QtWidgets.QHBoxLayout()
+        layout.addLayout(left_panel)
+        layout.addLayout(right_panel)
 
         central_widget = QtWidgets.QWidget()
         central_widget.setLayout(layout)
@@ -178,6 +187,21 @@ class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
             widgets=[self.pax_checkbox, self.cargo_checbox],
         )
         self.setLayout(layout)
+
+
+class FlightTable(QtWidgets.QTableWidget, MethodsMixin):
+    def __init__(self):
+        super(QtWidgets.QTableWidget, self).__init__()
+        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.setRowCount(0)
+
+        headers = constant.TABLE_HEADERS
+        self.setColumnCount(len(headers))
+        for i, header in enumerate(headers):
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(self._translate(header))
+            self.setHorizontalHeaderItem(i, item)
 
 
 class Ui_FlightScheduler(QWidget):
