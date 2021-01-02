@@ -86,8 +86,10 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         self.setWindowIcon(QtGui.QIcon(ICON_PATH))
 
         self.airports = AirportBox()
+        self.role_groupbox = RollGroupBox()
+
         layout = self._create_layout(
-            layout=QtWidgets.QGridLayout(), widgets=[self.airports]
+            layout=QtWidgets.QGridLayout(), widgets=[self.airports, self.role_groupbox]
         )
 
         central_widget = QtWidgets.QWidget()
@@ -135,7 +137,27 @@ class AirportBox(QtWidgets.QWidget, MethodsMixin):
         self.checkbox.setChecked(False)
 
 
-# RollGro
+class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
+    def __init__(self):
+        super(QtWidgets.QGroupBox, self).__init__()
+        self._init_gui()
+
+    def _init_gui(self):
+        self.setFlat(True)
+        self.setCheckable(False)
+        self.setTitle(self._translate("Role"))
+
+        self.pax_checkbox = QtWidgets.QCheckBox(self)
+        self.pax_checkbox.setText(self._translate("Pax"))
+
+        self.cargo_checbox = QtWidgets.QCheckBox(self)
+        self.cargo_checbox.setText(self._translate("Cargo"))
+
+        layout = self._create_layout(
+            layout=QtWidgets.QVBoxLayout(),
+            widgets=[self.pax_checkbox, self.cargo_checbox],
+        )
+        self.setLayout(layout)
 
 
 class Ui_FlightScheduler(QWidget):
