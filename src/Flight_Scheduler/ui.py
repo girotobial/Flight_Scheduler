@@ -86,11 +86,13 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         self.setWindowIcon(QtGui.QIcon(constant.ICON_PATH))
 
         self.airports = AirportBox()
+        self.airlines = AirlineBox()
         self.role_groupbox = RollGroupBox()
         self.flight_table = FlightTable()
 
         left_panel = self._create_layout(
-            layout=QtWidgets.QVBoxLayout(), widgets=[self.airports, self.role_groupbox]
+            layout=QtWidgets.QVBoxLayout(),
+            widgets=[self.airports, self.airlines, self.role_groupbox],
         )
 
         right_panel = self._create_layout(
@@ -164,6 +166,28 @@ class AirportBox(QtWidgets.QWidget, MethodsMixin):
 
     def _reset(self) -> None:
         self.checkbox.setChecked(False)
+
+
+class AirlineBox(QtWidgets.QWidget, MethodsMixin):
+    def __init__(self):
+        super(QtWidgets.QWidget, self).__init__()
+        self.checkbox = QtWidgets.QCheckBox(self)
+
+        self.checkbox.setText(self._translate("Specify Arilines?"))
+        self.checkbox.stateChanged.connect(self._checkbox_change_state)
+
+        label = self._create_label("Specify Airline ICAO Code(s)")
+        self.textbox = QtWidgets.QLineEdit(self)
+        self.textbox.setEnabled(False)
+
+        layout = self._create_layout(
+            layout=QtWidgets.QVBoxLayout(), widgets=[self.checkbox, label, self.textbox]
+        )
+        self.setLayout(layout)
+
+    def _checkbox_change_state(self):
+        state = self.checkbox.isChecked()
+        self.textbox.setEnabled(state)
 
 
 class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
