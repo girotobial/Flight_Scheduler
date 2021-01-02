@@ -35,6 +35,18 @@ class MethodsMixin:
         return QtCore.QCoreApplication.translate(type(self).__name__, text)
 
     def _create_label(self, text: str) -> QtWidgets.QLabel:
+        """Construct a label with the context applied
+
+        Parameters
+        ----------
+        text : str
+            Text to be applied to the label
+
+        Returns
+        -------
+        QtWidgets.QLabel
+            Label object
+        """
         label = QtWidgets.QLabel(self)
         label.setText(self._translate(text))
         return label
@@ -43,6 +55,20 @@ class MethodsMixin:
     def _create_layout(
         layout: QtWidgets.QLayout, widgets: List[QtWidgets.QWidget]
     ) -> QtWidgets.QLayout:
+        """Adds widgets to a layout. Not suitable for grid layouts
+
+        Parameters
+        ----------
+        layout : QtWidgets.QLayout
+            Layout to be constructed
+        widgets : List[QtWidgets.QWidget]
+            Widgets to add to the layout
+
+        Returns
+        -------
+        QtWidgets.QLayout
+            Supplied layout with widgets added
+        """
         for widget in widgets:
             layout.addWidget(widget)
         return layout
@@ -107,6 +133,9 @@ class AirportBox(QtWidgets.QWidget, MethodsMixin):
 
     def _reset(self) -> None:
         self.checkbox.setChecked(False)
+
+
+# RollGro
 
 
 class Ui_FlightScheduler(QWidget):
