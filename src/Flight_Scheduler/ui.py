@@ -1,6 +1,6 @@
 import os
 from copy import copy as copy
-from typing import List
+from typing import Dict, List
 
 from constant import ICON_PATH, VERSION
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -95,6 +95,26 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         central_widget = QtWidgets.QWidget()
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
+
+    @property
+    def roles(self) -> Dict[str, bool]:
+        return {
+            "pax": self.role_groupbox.pax_checkbox.isEnabled(),
+            "cargo": self.role_groupbox.pax.checkbox.isEnabled(),
+        }
+
+    @property
+    def departures(self) -> List[str]:
+        return [
+            departure for departure in self.airports.departure_textbox.text().split(",")
+        ]
+
+    @property
+    def destinations(self) -> List[str]:
+        return [
+            destination
+            for destination in self.airports.destination_textbox.text().split(",")
+        ]
 
 
 class AirportBox(QtWidgets.QWidget, MethodsMixin):
