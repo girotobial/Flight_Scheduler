@@ -114,7 +114,7 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
     def roles(self) -> Dict[str, bool]:
         return {
             "pax": self.role_groupbox.pax_checkbox.isEnabled(),
-            "cargo": self.role_groupbox.pax.checkbox.isEnabled(),
+            "cargo": self.role_groupbox.pax_checkbox.isEnabled(),
         }
 
     @property
