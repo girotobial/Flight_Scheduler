@@ -205,9 +205,11 @@ class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
 
         self.pax_checkbox = QtWidgets.QCheckBox(self)
         self.pax_checkbox.setText(self._translate("Pax"))
+        self.pax_checkbox.setChecked(True)
 
         self.cargo_checbox = QtWidgets.QCheckBox(self)
         self.cargo_checbox.setText(self._translate("Cargo"))
+        self.cargo_checbox.setChecked(True)
 
         layout = self._create_layout(
             layout=QtWidgets.QVBoxLayout(),
