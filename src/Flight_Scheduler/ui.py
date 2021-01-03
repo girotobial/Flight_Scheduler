@@ -3,6 +3,7 @@ from copy import copy as copy
 from typing import Dict, List
 
 import constant
+import data
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
@@ -75,8 +76,9 @@ class MethodsMixin:
 
 
 class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
-    def __init__(self):
+    def __init__(self, database: data.Database):
         super(QMainWindow, self).__init__()
+        self.db = database
         self._init_gui()
 
     def _init_gui(self) -> None:
@@ -88,7 +90,8 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         self.airports = AirportBox()
         self.airlines = AirlineBox()
         self.role_groupbox = RollGroupBox()
-        self.flight_table = FlightTable()
+        self.flight_table = FlightTable(database=self.db)
+        self.buttons = Buttons()
 
         left_panel = self._create_layout(
             layout=QtWidgets.QVBoxLayout(),
@@ -96,7 +99,7 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         )
 
         right_panel = self._create_layout(
-            layout=QtWidgets.QVBoxLayout(), widgets=[self.flight_table]
+            layout=QtWidgets.QVBoxLayout(), widgets=[self.flight_table, self.buttons]
         )
 
         layout = QtWidgets.QHBoxLayout()
@@ -214,7 +217,7 @@ class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
 
 
 class FlightTable(QtWidgets.QTableWidget, MethodsMixin):
-    def __init__(self):
+    def __init__(self, database: data.Database):
         super(QtWidgets.QTableWidget, self).__init__()
         self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -226,6 +229,22 @@ class FlightTable(QtWidgets.QTableWidget, MethodsMixin):
             item = QtWidgets.QTableWidgetItem()
             item.setText(self._translate(header))
             self.setHorizontalHeaderItem(i, item)
+
+
+class Buttons(QtWidgets.QWidget, MethodsMixin):
+    def __init__(self):
+        super(QtWidgets.QWidget, self).__init__()
+        self.refresh_button = QtWidgets.QPushButton(self)
+        self.refresh_button.setText(self._translate("Refresh"))
+
+        self.reset_button = QtWidgets.QPushButton(self)
+        self.reset_button.setText(self._translate("Reset"))
+
+        layout = self._create_layout(
+            layout=QtWidgets.QHBoxLayout(),
+            widgets=[self.reset_button, self.refresh_button],
+        )
+        self.setLayout(layout)
 
 
 class Ui_FlightScheduler(QWidget):
