@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import sqlalchemy as sqa
 from pydantic.dataclasses import dataclass
-from sqlalchemy.orm import registry, relationship, sessionmaker  # type: ignore
+from sqlalchemy.orm import aliased, registry, relationship, sessionmaker  # type: ignore
 
 mapper_registry = registry()
 
@@ -171,7 +171,7 @@ class Flight:
     airline_id: int = field(repr=False)
 
     airline: Airline
-    legs: List[Leg] = field(default_factory=list)
+    legs: List[Leg] = field(default_factory=list, repr=False)
 
     __mapper_args__ = {
         "properties": {
@@ -282,3 +282,52 @@ class Database:
             return [type_.to_dict() for type_ in results]
 
         return None
+
+    def flights(
+        self,
+        departures: Optional[List[str]] = None,
+        destinations: Optional[List[str]] = None,
+        airlines: Optional[List[str]] = None,
+    ) -> List[Tuple[int, int, str, str]]:
+        """Queries the database for a list of flights filtered on the arguments
+
+        Parameters
+        ----------
+        departures : List[str], optional
+            Icao codes of departure airfields e.g ['EGLL'], by default None
+        destinations : List[str], optional
+            ICAO codes of destination airfields e.g ['LSZH'], by default None
+        airlines : List[str], optional
+            ICAO codes of the airlines to be filtered on e.g ['BAW'], by default None
+
+        Returns
+        -------
+        List[Tuple[int, int, str, str]]
+            flight id, airline ICAO code, departure ICAO code, destination ICAO code, aircraft type ICAO code
+        """
+        origin = aliased(Airport, name="origin")
+        destination = aliased(Airport, name="destination")
+        query = (
+            self.session.query(
+                Leg.flight_id,
+                Airline.icao_code,
+                origin.icao_code,
+                destination.icao_code,
+                Type.icao_code,
+            )
+            .join("flight")
+            .join(origin, origin.id == Leg.origin_id)
+            .join(destination, destination.id == Leg.destination_id)
+            .join(Airline)
+            .join(Aircraft)
+            .join(Type)
+        )
+
+        if departures is not None:
+            query = query.filter(origin.icao_code.in_(departures))
+        if destinations is not None:
+            query = query.filter(destination.icao_code.in_(destinations))
+        if airlines is not None:
+            query = query.filter(Airline.icao_code.in_(airlines))  # type: ignore
+
+        return query.all()
