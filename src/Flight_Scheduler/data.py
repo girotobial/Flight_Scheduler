@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import sqlalchemy as sqa
+from constant import DATABASE_PATH
 from pydantic.dataclasses import dataclass
 from sqlalchemy.orm import aliased, registry, relationship, sessionmaker  # type: ignore
 
@@ -223,8 +224,22 @@ class Leg:
     }
 
 
-class Database:
-    def __init__(self, file_path: Union[str, os.PathLike]):
+class Singleton(type):
+    _instances = {}  # type: ignore
+
+    def __call__(cls, *args, **kwargs):
+        """
+        Possible changes to the value of the `__init__` argument do not affect
+        the returned instance.
+        """
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class Database(metaclass=Singleton):
+    def __init__(self, file_path: Union[str, os.PathLike] = DATABASE_PATH):
         self.file_path = self._enforce_path(file_path)
         self.engine = sqa.create_engine(f"sqlite://{file_path}")
 

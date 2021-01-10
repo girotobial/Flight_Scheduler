@@ -76,9 +76,8 @@ class MethodsMixin:
 
 
 class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
-    def __init__(self, database: data.Database):
+    def __init__(self):
         super(QMainWindow, self).__init__()
-        self.db = database
         self._init_gui()
 
     def _init_gui(self) -> None:
@@ -90,7 +89,7 @@ class MainWindow(QtWidgets.QMainWindow, MethodsMixin):
         self.airports = AirportBox()
         self.airlines = AirlineBox()
         self.role_groupbox = RollGroupBox()
-        self.flight_table = FlightTable(database=self.db)
+        self.flight_table = FlightTable()
         self.buttons = Buttons()
 
         left_panel = self._create_layout(
@@ -219,8 +218,9 @@ class RollGroupBox(QtWidgets.QGroupBox, MethodsMixin):
 
 
 class FlightTable(QtWidgets.QTableWidget, MethodsMixin):
-    def __init__(self, database: data.Database):
+    def __init__(self):
         super(QtWidgets.QTableWidget, self).__init__()
+        self.database = data.Database()
         self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.setRowCount(0)
